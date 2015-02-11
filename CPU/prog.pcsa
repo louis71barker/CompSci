@@ -1,0 +1,13 @@
+CONST	23
+i	10
+.start 100
+		ld R3,#fff
+		ld R1,#CONST
+		ld R2,i
+		add R1,R2,R3
+		br R3,skip
+		jsr subr
+.skip		jmp start
+
+.subr 300	
+		rts

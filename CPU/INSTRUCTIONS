@@ -1,0 +1,46 @@
+PCSM implements the machine used in the PCS module - the PCS Machine!
+
+This is a simple CPU, but functionally complete.
+
+MEMORY
+There are 4 user registers R0-3.
+It supports a 12bit address bus, giving 4K of memory.
+Each memory address is 16 bits, as are all registers.
+
+A memory file (see below) consists of ascii text, each line
+holding a hex address, and  16bit hex value to store in that address.
+
+
+Execution begins witha  JMP 100 instruction.
+
+INSTRUCTIONS
+
+The instruction set is defined as:
+
+LD Rx,#		0x##	load constant 
+LD Rx,Addr	1xaa	Load from address
+ADD Rx,Ry,Rz	2xyz	Rz=Rx+Ry
+JMP Addr	3aaa	PC=aaa
+ST Rx,Addr	4xaa	Store to address
+BR Rx,OFFSET	5xoo	If(Rx!=0) PC+=Offset
+				Only forward branches are possible
+				This is relative to the NEXT instruction
+				ie BR R0,0 executes the next op reguardless
+SUB Rx,Ry,Rz	6xyz	Rz=Ry-Rx
+AND Rx,Ry,Rz	7xyz	Rz=Rx&Ry
+OR Rx,Ry,Rz	8xyz	Rz=Rx|Ry
+NOT Rx,Ry	9x*y	Ry=!Rx. * is unused.
+LD Rx,(Ry)#	axy#	Load Rx from address Ry+#
+ST Rx,(Ry)#	bxy#	Store Rx at address Ry+#
+JSR Addr	caaa	Stores PC on the stack, PC=Addr
+RTS 		dXXX	Gets new PC from the stack
+		e???	Unused...
+LD Rx,####	fxXX ####	2 byte instruction, loads a large constant into Rx
+
+The JSR and RTS instructions use R3 as a stack pointer. This grows down in memory,
+so should be initialised to something like 0xfff.
+
+You can copy one register to another using: OR Rx,Rx,Ry.
+
+The file testProg contains the code to count from one to ten.
+it halts by jumping to address fff and looping forever.

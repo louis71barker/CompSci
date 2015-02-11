@@ -1,0 +1,12 @@
+
+.start 100
+		LD R1,#00
+		LD R2,#01
+		LD R3,#0a
+.loop	ADD R1,R2,R1
+		SUB R1,R3,R0
+		BR R0,skip
+		jmp end
+.skip	JMP loop
+
+.end jmp end
